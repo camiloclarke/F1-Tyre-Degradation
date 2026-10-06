@@ -1,6 +1,6 @@
 # F1 Tyre Degradation Model
 
-A Python project that works out how quickly F1 tyres wear out during a race, and uses that to find the fastest pit stop strategy. It uses real timing data from the FastF1 library.
+A Python project that works out how quickly F1 tyres wear out during a race, and uses that to find the fastest pit stop strategy. It uses real timing data from the FastF1 library, tested on the 2024 Bahrain and 2026 Australian Grands Prix.
 
 ![Tyre degradation, 2024 Bahrain GP](figures/2024_bahrain_grand_prix/degradation.png)
 
@@ -34,6 +34,25 @@ My first version used a fixed guess for the fuel effect. That made the soft tyre
 ![Strategy comparison](figures/2024_bahrain_grand_prix/strategy_ranking.png)
 
 ![Kalman filter estimate for Verstappen](figures/2024_bahrain_grand_prix/kalman_live_deg.png)
+
+## Results: 2026 Australian Grand Prix
+
+The first race under the 2026 regulations, run to check how the model behaves on new cars and a much less abrasive track.
+
+| | |
+|---|---|
+| Soft tyre wear | +0.052 s/lap |
+| Hard tyre wear | +0.040 s/lap |
+| Medium tyre wear | −0.024 s/lap |
+| Fastest strategy | 1 stop: Medium → Hard |
+
+Wear rates are well under half of Bahrain's, which fits Albert Park's smoother surface, and a 1-stop becomes possible.
+
+**The Medium result is not physically possible.** A negative wear rate means the tyre gets faster as it ages, after fuel and track have already been accounted for. The likely cause is that the model fits one fuel and track effect for the whole field, and in this race the Medium was mostly used in the opening stint, where traffic and the early-race track behave differently from the rest of the race. Because the strategy simulation uses this number, the Medium → Hard result should not be trusted until this is fixed. Next step: fit the fuel/track effect separately by stint, or exclude laps in traffic.
+
+![Tyre degradation, 2026 Australian GP](figures/2026_australian_grand_prix/degradation.png)
+
+![Strategy comparison, 2026 Australian GP](figures/2026_australian_grand_prix/strategy_ranking.png)
 
 ## Testing it
 
